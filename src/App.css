@@ -1,0 +1,19 @@
+.app {
+    display: flex;
+  }
+  
+  .canvas-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .song-list-container {
+    flex: 1;
+    overflow-y: auto;
+    height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  

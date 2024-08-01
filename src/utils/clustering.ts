@@ -1,7 +1,8 @@
 import { Song } from '../types/types';
+import KMeans from 'kmeans-js';
 
-export const clusterSongs = async (songs: Song[], k: number) => {
-  const kmeans = await import('ml-kmeans');
+export const clusterSongs = (songs: Song[], k: number) => {
   const data = songs.map(song => song.features);
-  return kmeans.default(data, k, { initialization: 'kmeans++' });
+  const kmeans = new KMeans();
+  return kmeans.clusterize(data, { k });
 };

@@ -1,79 +1,68 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Song } from '../../types/types';
 import { clusterSongs } from '../../utils/clustering';
-import { showTooltip, hideTooltip } from '../Tooltip/Tooltip';
-import { getSongPreviewUrl } from '../../services/api';
 
 interface CanvasProps {
   songs: Song[];
-  setSelectedSong: (song: Song | null) => void;
 }
 
-export const drawSongs = async (songs: Song[], setSelectedSong: (song: Song | null) => void) => {
-  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  const k = 5; // number of clusters
-  const clusters = await clusterSongs(songs, k);
-  console.log('Clusters:', clusters);
-
-  if (!clusters || clusters.clusters.length !== songs.length) {
-    console.error('Clustering failed or returned unexpected results');
-    return;
-  }
-
-  const colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6'];
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  clusters.clusters.forEach((cluster: number, index: number) => {
-    const song = songs[index];
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height;
-    const radius = Math.log(song.streams) / Math.log(10); // size based on streams
-
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, 2 * Math.PI);
-    ctx.fillStyle = colors[cluster];
-    ctx.fill();
-    ctx.stroke();
-
-    canvas.addEventListener('mousemove', (event) => {
-      if (ctx.isPointInPath(event.offsetX, event.offsetY)) {
-        showTooltip(song, event.pageX, event.pageY);
-      } else {
-        hideTooltip();
-      }
-    });
-
-    canvas.addEventListener('click', async (event) => {
-      if (ctx.isPointInPath(event.offsetX, event.offsetY)) {
-        setSelectedSong(song);
-        try {
-          const previewUrl = await getSongPreviewUrl(song.id.toString());
-          if (previewUrl) {
-            const audio = new Audio(previewUrl);
-            audio.play();
-          }
-        } catch (error) {
-          console.error('Error fetching song preview URL:', error);
-        }
-      }
-    });
-  });
-};
-
-const Canvas: React.FC<CanvasProps> = ({ songs, setSelectedSong }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+const Canvas: React.FC<CanvasProps> = ({ songs }) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    if (songs.length > 0) {
-      drawSongs(songs, setSelectedSong);
-    }
-  }, [songs, setSelectedSong]);
+    const draw = async () => {
+      if (canvasRef.current && songs.length > 0) {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-  return <canvas id="canvas" ref={canvasRef} width="800" height="600"></canvas>;
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Clustering songs
+        const k = 5;
+        try {
+          const result = await clusterSongs(songs, k);
+          const clusters = result.clusters;
+          const centroids = result.centroids;
+
+          // Log to check clusters and centroids
+          console.log('Clusters:', clusters);
+          console.log('Centroids:', centroids);
+
+          // Draw centroids
+          centroids.forEach((centroid: number[], index: number) => {
+            ctx.beginPath();
+            ctx.arc(centroid[0] * canvas.width, centroid[1] * canvas.height, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            ctx.closePath();
+          });
+
+          // Draw songs
+          clusters.forEach((clusterIndex: number, index: number) => {
+            const song = songs[index];
+            const centroid = centroids[clusterIndex];
+            const x = centroid[0] * canvas.width;
+            const y = centroid[1] * canvas.height;
+            const size = Math.log(song.streams) / 10;
+
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, 2 * Math.PI);
+            ctx.fillStyle = 'blue';
+            ctx.fill();
+            ctx.closePath();
+          });
+        } catch (error) {
+          console.error('Clustering failed', error);
+        }
+      }
+    };
+
+    draw();
+  }, [songs]);
+
+  return <canvas ref={canvasRef} width={400} height={600} style={{ border: '1px solid black' }} />;
 };
 
 export default Canvas;
