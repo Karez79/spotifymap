@@ -1,5 +1,6 @@
 import React from 'react';
 import { Song } from '../../types/types';
+import styles from './SongList.module.css';
 
 interface SongListProps {
   songs: Song[];
@@ -8,10 +9,10 @@ interface SongListProps {
 
 const SongList: React.FC<SongListProps> = ({ songs, setSelectedSong }) => {
   return (
-    <div>
+    <div className={styles.songListContainer}>
       {songs.map((song) => (
-        <div key={song.id} onClick={() => setSelectedSong(song)}>
-          {song.name} - {song.artists}
+        <div key={song.id} className={styles.songItem} onClick={() => setSelectedSong(song)}>
+          {song.name} - {song.artists} - {song.streams}
         </div>
       ))}
     </div>

@@ -1,15 +1,22 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import svgr from 'vite-plugin-svgr';
-import envCompatible from 'vite-plugin-env-compatible';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+import rawPlugin from 'vite-plugin-raw';
 
 export default defineConfig({
   base: './',
   plugins: [
     react(),
-    svgr({
-      svgrOptions: {},
+    rawPlugin({
+      fileRegex: /\.csv$/,
     }),
-    envCompatible(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'src/data/Most Streamed Spotify Songs 2024.csv',
+          dest: ''
+        }
+      ]
+    })
   ],
 });

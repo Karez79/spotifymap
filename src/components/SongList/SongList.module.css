@@ -1,18 +1,23 @@
-.songList {
-    display: flex;
-    flex-direction: column;
-    max-height: 400px;
-    overflow-y: auto;
-    margin-top: 20px;
-  }
-  
-  .songItem {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    cursor: pointer;
-  }
-  
-  .songItem:hover {
-    background-color: #f0f0f0;
-  }
-  
+/* src/components/SongList/SongList.module.css */
+.songListContainer {
+  overflow-y: auto;
+  height: 100%;
+  padding: 10px;
+}
+
+.songItem {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.songItem:hover {
+  background-color: #f0f0f0;
+}
+
+.loadMoreButton {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  cursor: pointer;
+}

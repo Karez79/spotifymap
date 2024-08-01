@@ -1,22 +1,19 @@
+import React from 'react';
 import { Song } from '../../types/types';
 import styles from './Tooltip.module.css';
 
-let tooltip: HTMLDivElement | null;
+interface TooltipProps {
+  song: Song;
+}
 
-export const showTooltip = (song: Song, x: number, y: number) => {
-  if (!tooltip) {
-    tooltip = document.createElement('div');
-    tooltip.className = styles.tooltip;
-    document.body.appendChild(tooltip);
-  }
-  tooltip.innerHTML = `${song.name} by ${song.artists}`;
-  tooltip.style.left = `${x + 10}px`;
-  tooltip.style.top = `${y + 10}px`;
-  tooltip.style.display = 'block';
+const Tooltip: React.FC<TooltipProps> = ({ song }) => {
+  return (
+    <div className={styles.tooltip}>
+      <h3>{song.name}</h3>
+      <p>{song.artists}</p>
+      <p>{song.streams.toLocaleString()} streams</p>
+    </div>
+  );
 };
 
-export const hideTooltip = () => {
-  if (tooltip) {
-    tooltip.style.display = 'none';
-  }
-};
+export default Tooltip;

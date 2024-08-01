@@ -1,19 +1,15 @@
-.app {
-    display: flex;
-  }
-  
-  .canvas-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .song-list-container {
-    flex: 1;
-    overflow-y: auto;
-    height: 100vh;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-  
+/* src/App.css */
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.canvas-container {
+  flex: 1;
+  border-right: 1px solid #ccc;
+}
+
+.songlist-container {
+  flex: 1;
+  overflow-y: auto;
+}

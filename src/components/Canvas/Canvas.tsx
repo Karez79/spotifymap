@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Song } from '../../types/types';
 import { clusterSongs } from '../../utils/clustering';
+import styles from './Canvas.module.css';
 
 interface CanvasProps {
   songs: Song[];
@@ -22,16 +23,14 @@ const Canvas: React.FC<CanvasProps> = ({ songs }) => {
         // Clustering songs
         const k = 5;
         try {
-          const result = await clusterSongs(songs, k);
-          const clusters = result.clusters;
-          const centroids = result.centroids;
+          const { clusters, centroids } = clusterSongs(songs, k);
 
           // Log to check clusters and centroids
           console.log('Clusters:', clusters);
           console.log('Centroids:', centroids);
 
           // Draw centroids
-          centroids.forEach((centroid: number[], index: number) => {
+          centroids.forEach((centroid, index) => {
             ctx.beginPath();
             ctx.arc(centroid[0] * canvas.width, centroid[1] * canvas.height, 10, 0, 2 * Math.PI);
             ctx.fillStyle = 'red';
@@ -40,7 +39,7 @@ const Canvas: React.FC<CanvasProps> = ({ songs }) => {
           });
 
           // Draw songs
-          clusters.forEach((clusterIndex: number, index: number) => {
+          clusters.forEach((clusterIndex, index) => {
             const song = songs[index];
             const centroid = centroids[clusterIndex];
             const x = centroid[0] * canvas.width;
@@ -62,7 +61,7 @@ const Canvas: React.FC<CanvasProps> = ({ songs }) => {
     draw();
   }, [songs]);
 
-  return <canvas ref={canvasRef} width={400} height={600} style={{ border: '1px solid black' }} />;
+  return <canvas ref={canvasRef} className={styles.canvas} />;
 };
 
 export default Canvas;

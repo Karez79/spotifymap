@@ -1,0 +1,7 @@
+/* src/components/Canvas/Canvas.module.css */
+.canvas {
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+  }
+  
