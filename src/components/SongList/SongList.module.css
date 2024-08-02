@@ -1,23 +1,25 @@
-/* src/components/SongList/SongList.module.css */
-.songListContainer {
+.song-list {
+  max-height: 100vh;
   overflow-y: auto;
-  height: 100%;
   padding: 10px;
 }
 
-.songItem {
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
+.song-item {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.song-item button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
   cursor: pointer;
 }
 
-.songItem:hover {
-  background-color: #f0f0f0;
-}
-
-.loadMoreButton {
-  display: block;
-  margin: 10px auto;
-  padding: 10px;
-  cursor: pointer;
+.song-item button:hover {
+  background-color: #0056b3;
 }

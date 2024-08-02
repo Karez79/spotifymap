@@ -1,0 +1,10 @@
+.threeCanvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: black; /* Сделаем фон черным для контраста */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  

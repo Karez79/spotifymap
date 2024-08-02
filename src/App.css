@@ -1,15 +1,33 @@
-/* src/App.css */
-.app-container {
+.App {
   display: flex;
   height: 100vh;
 }
 
-.canvas-container {
+.left-pane {
   flex: 1;
-  border-right: 1px solid #ccc;
+  background-color: black; /* Сделаем фон черным для контраста */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.songlist-container {
+.right-pane {
   flex: 1;
   overflow-y: auto;
+  padding: 10px;
+  background-color: white; /* Сделаем фон белым */
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
 }

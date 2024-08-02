@@ -1,9 +1,19 @@
 .tooltip {
   position: absolute;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 5px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  padding: 10px;
   border-radius: 5px;
   pointer-events: none;
-  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.tooltip h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.tooltip p {
+  margin: 5px 0;
+  font-size: 0.9em;
 }

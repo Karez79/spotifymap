@@ -1,49 +1,43 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { fetchSongs } from './data/data';
-import Canvas from './components/Canvas/Canvas';
-import SongList from './components/SongList/SongList';
-import { Song } from './types/types';
-import Tooltip from './components/Tooltip/Tooltip';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import SongList from './components/SongList/SongList';
+import ThreeCanvas from './components/ThreeCanvas/ThreeCanvas';
+import Tooltip from './components/Tooltip/Tooltip';
+import { Song } from './types/types';
+import { fetchSongs } from './data/data';
 
-const App = () => {
+const App: React.FC = () => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [visibleSongs, setVisibleSongs] = useState<Song[]>([]);
-  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [tooltip, setTooltip] = useState<{ x: number; y: number; song: Song } | null>(null);
 
   useEffect(() => {
-    fetchSongs().then(fetchedSongs => {
-      setSongs(fetchedSongs);
-      setVisibleSongs(fetchedSongs.slice(0, 15)); // Load the first 15 songs initially
+    fetchSongs().then(data => {
+      console.log("Fetched songs:", data); // Отладка для проверки загруженных песен
+      setSongs(data);
+      setVisibleSongs(data.slice(0, 15));
+    }).catch(error => {
+      console.error("Error fetching songs:", error);
     });
   }, []);
 
-  const loadMoreSongs = useCallback(() => {
-    if (!loading && visibleSongs.length < songs.length) {
-      setLoading(true);
-      setTimeout(() => {
-        const nextSongs = songs.slice(visibleSongs.length, visibleSongs.length + 15);
-        setVisibleSongs(prevSongs => [...prevSongs, ...nextSongs]);
-        setLoading(false);
-      }, 1000); // Simulate loading delay
-    }
-  }, [loading, visibleSongs, songs]);
+  const loadMoreSongs = () => {
+    setVisibleSongs(prevVisibleSongs => [
+      ...prevVisibleSongs,
+      ...songs.slice(prevVisibleSongs.length, prevVisibleSongs.length + 15)
+    ]);
+  };
 
   return (
-    <div className="app-container">
-      <div className="canvas-container">
-        {songs.length > 0 && <Canvas songs={visibleSongs} />}
+    <div className="App">
+      <div className="left-pane">
+        {visibleSongs.length > 0 ? <ThreeCanvas songs={visibleSongs} setTooltip={setTooltip} /> : <p>Loading...</p>}
       </div>
-      <div className="songlist-container">
-        <SongList songs={visibleSongs} setSelectedSong={setSelectedSong} />
-        {visibleSongs.length < songs.length && (
-          <button className="load-more-button" onClick={loadMoreSongs} disabled={loading}>
-            {loading ? 'Loading...' : 'Load More'}
-          </button>
-        )}
+      <div className="right-pane">
+        <SongList songs={visibleSongs} />
+        <button onClick={loadMoreSongs}>Load More Songs</button>
       </div>
-      {selectedSong && <Tooltip song={selectedSong} />}
+      {tooltip && <Tooltip song={tooltip.song} position={{ x: tooltip.x, y: tooltip.y }} />}
     </div>
   );
 };

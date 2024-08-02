@@ -1,17 +1,18 @@
 import React from 'react';
 import { Song } from '../../types/types';
-import styles from './Tooltip.module.css';
+import './Tooltip.module.css';
 
 interface TooltipProps {
   song: Song;
+  position: { x: number; y: number };
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ song }) => {
+const Tooltip: React.FC<TooltipProps> = ({ song, position }) => {
   return (
-    <div className={styles.tooltip}>
-      <h3>{song.name}</h3>
+    <div className="tooltip" style={{ left: position.x, top: position.y }}>
+      <p><strong>{song.name}</strong></p>
       <p>{song.artists}</p>
-      <p>{song.streams.toLocaleString()} streams</p>
+      <p>Streams: {song.streams}</p>
     </div>
   );
 };

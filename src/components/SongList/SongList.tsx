@@ -1,18 +1,17 @@
 import React from 'react';
 import { Song } from '../../types/types';
-import styles from './SongList.module.css';
+import './SongList.module.css';
 
 interface SongListProps {
   songs: Song[];
-  setSelectedSong: (song: Song) => void;
 }
 
-const SongList: React.FC<SongListProps> = ({ songs, setSelectedSong }) => {
+const SongList: React.FC<SongListProps> = ({ songs }) => {
   return (
-    <div className={styles.songListContainer}>
+    <div className="songList">
       {songs.map((song) => (
-        <div key={song.id} className={styles.songItem} onClick={() => setSelectedSong(song)}>
-          {song.name} - {song.artists} - {song.streams}
+        <div key={song.id} className="songItem">
+          <p>{song.name} - {song.artists}</p>
         </div>
       ))}
     </div>
