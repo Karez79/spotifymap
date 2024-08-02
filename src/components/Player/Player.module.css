@@ -1,0 +1,23 @@
+.player-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #0D1B2A; /* Цвет фона */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  audio {
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .visualizer {
+    width: 100%;
+    height: 200px; /* Высота визуализатора */
+    background-color: #1B263B; /* Цвет фона визуализатора */
+    margin-top: 20px;
+    border-radius: 10px;
+  }
+  

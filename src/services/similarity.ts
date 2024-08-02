@@ -1,19 +1,40 @@
 import { Song } from '../types/types';
+import kmeans from 'ml-kmeans';
 
-export const findSimilarSongs = (songs: Song[]): [Song, Song][] => {
-  const similarPairs: [Song, Song][] = [];
+const numClusters = 10; // Количество кластеров
+
+let clusteredSongs: Song[][] = [];
+let songClusters: number[] = [];
+
+export const clusterSongs = (songs: Song[]): void => {
+  const features = songs.map(song => song.features);
+  const clusters = kmeans(features, numClusters);
+
+  clusteredSongs = Array.from({ length: numClusters }, () => []);
+  songClusters = clusters.clusters;
+
+  songs.forEach((song, index) => {
+    clusteredSongs[songClusters[index]].push(song);
+  });
+
+  console.log('Clustered Songs:', clusteredSongs);
+};
+
+export const findSimilarSongs = (selectedSong: Song, allSongs: Song[]): Song[] => {
+  const similarSongs: Song[] = [];
   const threshold = 0.8;
+  const clusterIndex = songClusters[selectedSong.id];
 
-  for (let i = 0; i < songs.length; i++) {
-    for (let j = i + 1; j < songs.length; j++) {
-      const similarity = calculateCosineSimilarity(songs[i].features, songs[j].features);
+  for (const song of clusteredSongs[clusterIndex]) {
+    if (song.id !== selectedSong.id) {
+      const similarity = calculateCosineSimilarity(selectedSong.features, song.features);
       if (similarity > threshold) {
-        similarPairs.push([songs[i], songs[j]]);
+        similarSongs.push(song);
       }
     }
   }
 
-  return similarPairs;
+  return similarSongs;
 };
 
 const calculateCosineSimilarity = (vecA: number[], vecB: number[]): number => {

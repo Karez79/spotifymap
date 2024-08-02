@@ -11,9 +11,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^9.109.2",
+    "@react-three/fiber": "^8.16.8",
     "@vitejs/plugin-react": "^4.3.1",
-    "axios": "^1.7.2",
+    "annoy": "^4.0.0",
+    "axios": "^1.7.3",
     "csv-parser": "^3.0.0",
+    "gsap": "^3.12.5",
     "kmeans-js": "^0.1.2",
     "ml-kmeans": "^6.0.0",
     "numeric": "^1.2.6",

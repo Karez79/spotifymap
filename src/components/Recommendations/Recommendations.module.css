@@ -1,0 +1,24 @@
+.recommendations {
+    margin-top: 20px;
+  }
+  
+  .recommendations h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .recommendations ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .recommendations li {
+    cursor: pointer;
+    padding: 5px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .recommendations li:hover {
+    background-color: #f0f0f0;
+  }
+  
