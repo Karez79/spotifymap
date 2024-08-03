@@ -2,16 +2,14 @@ import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { Song } from '../../types/types';
 import { findSimilarSongs } from '../../services/similarity';
-import './ThreeCanvas.module.css';
 import gsap from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 interface ThreeCanvasProps {
   songs: Song[];
-  setTooltip: (tooltip: { x: number; y: number; song: Song } | null) => void;
 }
 
-const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs, setTooltip }) => {
+const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs }) => {
   const canvasRef = useRef<HTMLDivElement | null>(null);
   const [showHint, setShowHint] = useState(true);
 
@@ -45,7 +43,7 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs, setTooltip }) => {
     controls.update();
 
     const songNodes: THREE.Mesh[] = [];
-    const geometry = new THREE.SphereGeometry(0.7, 32, 32); // Размер узлов увеличен
+    const geometry = new THREE.SphereGeometry(0.3, 32, 32); // Уменьшенный размер узлов
 
     const colors = [0xFFFFFF, 0xADD8E6, 0xFFFFE0, 0xDDA0DD]; // Цвета звездного неба
 
@@ -60,10 +58,11 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs, setTooltip }) => {
       const material = new THREE.MeshBasicMaterial({ color: colors[index % colors.length] });
       const node = new THREE.Mesh(geometry, material);
       node.position.set(x, y, z);
+      node.scale.setScalar(Math.log(song.streams) / 10); // Уменьшенный размер узла на основе популярности
       songNodes.push(node);
       scene.add(node);
 
-      gsap.fromTo(node.scale, { x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 1, duration: 1, ease: "power1.inOut" });
+      gsap.fromTo(node.scale, { x: 0, y: 0, z: 0 }, { x: node.scale.x, y: node.scale.y, z: node.scale.z, duration: 1, ease: "power1.inOut" });
 
       // Добавим эффект мерцания
       gsap.to(node.material, {
@@ -78,7 +77,7 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs, setTooltip }) => {
     });
 
     // Добавим звезды на черный фон
-    const starGeometry = new THREE.SphereGeometry(0.2, 32, 32);
+    const starGeometry = new THREE.SphereGeometry(0.1, 32, 32); // Уменьшенный размер звезд
     const starMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
 
     for (let i = 0; i < 100; i++) {
@@ -88,7 +87,7 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs, setTooltip }) => {
     }
 
     const lines: THREE.Line[] = [];
-    const similarPairs = findSimilarSongs(songs[0], songs); // Убедитесь, что аргументы правильные
+    const similarPairs = songs.flatMap(song => findSimilarSongs(song, songs));
 
     similarPairs.forEach(([song1, song2]) => {
       const index1 = songs.indexOf(song1);
@@ -108,34 +107,6 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs, setTooltip }) => {
       gsap.fromTo(line.material, { opacity: 0 }, { opacity: 0.5, duration: 1, ease: "power1.inOut" });
     });
 
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-
-    const onMouseMove = (event: MouseEvent) => {
-      mouse.x = (event.clientX / width) * 2 - 1;
-      mouse.y = -(event.clientY / height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(songNodes);
-
-      if (intersects.length > 0) {
-        const intersect = intersects[0];
-        const { x, y } = intersect.point;
-        setTooltip({
-          x: (x + 1) * width / 2,
-          y: -(y - 1) * height / 2,
-          song: intersect.object.userData.song
-        });
-
-        gsap.to(intersect.object.scale, { x: 1.5, y: 1.5, z: 1.5, duration: 0.5, ease: "power1.inOut" });
-      } else {
-        setTooltip(null);
-        songNodes.forEach(node => gsap.to(node.scale, { x: 1, y: 1, z: 1, duration: 0.5, ease: "power1.inOut" }));
-      }
-    };
-
-    window.addEventListener('mousemove', onMouseMove);
-
     const animate = () => {
       requestAnimationFrame(animate);
       controls.update();
@@ -144,7 +115,6 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs, setTooltip }) => {
 
     animate();
 
-    // Плавное перемещение карты
     const animateMap = () => {
       gsap.to(camera.position, {
         x: Math.random() * 50 - 25,
@@ -161,9 +131,8 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs, setTooltip }) => {
       while (canvasRef.current?.firstChild) {
         canvasRef.current.removeChild(canvasRef.current.firstChild);
       }
-      window.removeEventListener('mousemove', onMouseMove);
     };
-  }, [songs, setTooltip]);
+  }, [songs]);
 
   return (
     <>
@@ -172,7 +141,7 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs, setTooltip }) => {
           Зажмите мышку и перемещайте карту
         </div>
       )}
-      <div ref={canvasRef} className="threeCanvas" style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }} />
+      <div ref={canvasRef} className="threeCanvas" />
     </>
   );
 };

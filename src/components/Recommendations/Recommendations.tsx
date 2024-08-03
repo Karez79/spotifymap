@@ -1,7 +1,6 @@
-// components/Recommendations/Recommendations.tsx
-
 import React from 'react';
 import { Song } from '../../types/types';
+// import './Recommendations.module.css';
 
 interface RecommendationsProps {
   songs: Song[];
@@ -11,11 +10,11 @@ interface RecommendationsProps {
 const Recommendations: React.FC<RecommendationsProps> = ({ songs, onSongClick }) => {
   return (
     <div className="recommendations">
-      <h3>Recommended Songs</h3>
+      <h2>Recommended Songs</h2>
       <ul>
-        {songs.map(song => (
+        {songs.map((song) => (
           <li key={song.id} onClick={() => onSongClick(song)}>
-            {song.name} - {song.artists}
+            <strong>{song.name}</strong> by {Array.isArray(song.artists) ? song.artists.join(', ') : song.artists}
           </li>
         ))}
       </ul>

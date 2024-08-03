@@ -47,7 +47,7 @@ const Canvas: React.FC<CanvasProps> = ({ songs }) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Найти пары похожих песен
-        const similarPairs = findSimilarSongs(visibleSongs[0], visibleSongs);
+        const similarPairs = findSimilarSongs(visibleSongs[0], visibleSongs); // Убедитесь, что аргументы правильные
 
         // Сгенерировать узлы
         const generatedNodes: Node[] = visibleSongs.map((song) => {
@@ -69,7 +69,7 @@ const Canvas: React.FC<CanvasProps> = ({ songs }) => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           // Нарисовать связи
-          similarPairs.forEach(([song1, song2]) => {
+          similarPairs.forEach(([song1, song2]: [Song, Song]) => {
             const node1 = generatedNodes.find((node) => node.song.id === song1.id);
             const node2 = generatedNodes.find((node) => node.song.id === song2.id);
             if (node1 && node2) {

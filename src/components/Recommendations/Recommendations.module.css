@@ -1,24 +1,28 @@
-.recommendations {
+/* .recommendations {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 5px;
     margin-top: 20px;
+    overflow-y: auto;
   }
   
   .recommendations h2 {
-    font-size: 1.5em;
     margin-bottom: 10px;
   }
   
   .recommendations ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
   }
   
   .recommendations li {
+    padding: 10px;
     cursor: pointer;
-    padding: 5px 0;
-    border-bottom: 1px solid #ccc;
+    transition: background-color 0.3s ease;
   }
   
   .recommendations li:hover {
-    background-color: #f0f0f0;
+    background-color: #415a77;
   }
-  
+   */

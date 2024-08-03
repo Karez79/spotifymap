@@ -5,11 +5,15 @@ import './Tooltip.module.css';
 interface TooltipProps {
   song: Song;
   position: { x: number; y: number };
+  visible: boolean;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ song, position }) => {
+const Tooltip: React.FC<TooltipProps> = ({ song, position, visible }) => {
   return (
-    <div className="tooltip" style={{ left: position.x, top: position.y }}>
+    <div
+      className={`tooltip ${visible ? 'visible' : ''}`}
+      style={{ left: position.x, top: position.y }}
+    >
       <p><strong>{song.name}</strong></p>
       <p>{song.artists}</p>
       <p>Streams: {song.streams}</p>
