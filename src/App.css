@@ -358,3 +358,21 @@ li:hover {
   /* color: #FFD700; */
   animation: pulse 1.5s infinite;
 }
+
+.tooltip {
+  position: absolute;
+  padding: 10px;
+  border-radius: 5px;
+  pointer-events: none;
+  background: transparent;
+  color: #E0E1DD;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+.tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

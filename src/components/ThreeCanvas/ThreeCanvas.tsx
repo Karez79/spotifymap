@@ -4,6 +4,7 @@ import { Song } from '../../types/types';
 import { findSimilarSongs } from '../../services/similarity';
 import gsap from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import Tooltip from '../Tooltip/Tooltip';
 
 interface ThreeCanvasProps {
   songs: Song[];
@@ -12,6 +13,11 @@ interface ThreeCanvasProps {
 const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs }) => {
   const canvasRef = useRef<HTMLDivElement | null>(null);
   const [showHint, setShowHint] = useState(true);
+  const [tooltip, setTooltip] = useState<{ song: Song | null, position: { x: number, y: number }, visible: boolean }>({
+    song: null,
+    position: { x: 0, y: 0 },
+    visible: false
+  });
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -41,6 +47,9 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs }) => {
     controls.minDistance = 20;
     controls.maxDistance = 100;
     controls.update();
+
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
 
     const songNodes: THREE.Mesh[] = [];
     const geometry = new THREE.SphereGeometry(0.3, 32, 32); // Уменьшенный размер узлов
@@ -113,6 +122,24 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs }) => {
       renderer.render(scene, camera);
     };
 
+    const onMouseMove = (event: MouseEvent) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(songNodes);
+
+      if (intersects.length > 0) {
+        const intersectedNode = intersects[0].object as THREE.Mesh;
+        const { song } = intersectedNode.userData;
+        setTooltip({ song, position: { x: event.clientX, y: event.clientY }, visible: true });
+
+        gsap.to(intersectedNode.scale, { x: Math.log(song.streams) / 8, y: Math.log(song.streams) / 8, z: Math.log(song.streams) / 8, duration: 0.3 });
+      } else {
+        setTooltip((prev) => ({ ...prev, visible: false }));
+      }
+    };
+
     animate();
 
     const animateMap = () => {
@@ -127,7 +154,10 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs }) => {
 
     animateMap();
 
+    window.addEventListener('mousemove', onMouseMove);
+
     return () => {
+      window.removeEventListener('mousemove', onMouseMove);
       while (canvasRef.current?.firstChild) {
         canvasRef.current.removeChild(canvasRef.current.firstChild);
       }
@@ -142,6 +172,7 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({ songs }) => {
         </div>
       )}
       <div ref={canvasRef} className="threeCanvas" />
+      {tooltip.song && <Tooltip song={tooltip.song} position={tooltip.position} visible={tooltip.visible} />}
     </>
   );
 };
