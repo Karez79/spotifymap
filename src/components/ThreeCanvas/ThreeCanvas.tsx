@@ -5,6 +5,7 @@ import { findSimilarSongs } from '../../services/similarity';
 import gsap from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Tooltip from '../Tooltip/Tooltip';
+import './ThreeCanvas.module.css';
 
 interface ThreeCanvasProps {
   songs: Song[];

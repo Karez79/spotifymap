@@ -1,28 +1,57 @@
-/* .player {
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    border-radius: 5px;
-    margin-top: 20px;
-  }
-  
-  .player h2,
-  .player h3 {
-    margin-bottom: 10px;
-  }
-  
-  .player ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .player li {
+/* Player.module.css */
+.player {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
     padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: transparent;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: bottom 0.5s ease-out, opacity 0.5s ease-out;
+    opacity: 0;
   }
   
-  .player li:hover {
-    background-color: #415a77;
+  .player-visible {
+    bottom: 0;
+    opacity: 1;
   }
-   */
+  
+  .song-info {
+    font-size: 18px;
+    text-align: center;
+  }
+  
+  .audio-element {
+    width: 50%;
+    margin-top: 10px;
+    border-radius: 50px;
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .controls svg {
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .controls svg:hover {
+    transform: scale(1.2);
+  }
+  
+  .left-controls,
+  .right-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  

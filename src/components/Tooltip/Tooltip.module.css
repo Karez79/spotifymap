@@ -1,19 +1,18 @@
-/* .tooltip {
-  position: fixed;
-  bottom: -200px; 
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
+/* Tooltip.module.css */
+.tooltip {
+  position: absolute;
   padding: 10px;
   border-radius: 5px;
-  transition: bottom 0.3s ease, opacity 0.3s ease;
-  opacity: 0;
   pointer-events: none;
-} */
+  background: transparent;
+  color: #E0E1DD;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(-10px);
+  opacity: 0;
+}
 
-/* .tooltip.visible {
-  bottom: 20px; 
+.tooltip.visible {
   opacity: 1;
-  pointer-events: auto;
-} */
+  transform: translateY(0);
+}

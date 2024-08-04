@@ -1,14 +1,20 @@
-/* .recommendations {
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    border-radius: 5px;
-    margin-top: 20px;
-    overflow-y: auto;
+/* Recommendations.module.css */
+.recommendations {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+  }
+  
+  .recommendations.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
   
   .recommendations h2 {
-    margin-bottom: 10px;
+    margin: 10px 0;
   }
   
   .recommendations ul {
@@ -17,12 +23,36 @@
   }
   
   .recommendations li {
-    padding: 10px;
     cursor: pointer;
+    margin: 5px 0;
     transition: background-color 0.3s ease;
   }
   
   .recommendations li:hover {
-    background-color: #415a77;
+    background-color: #415A77;
   }
-   */
+  
+  .recommendations .current-song {
+    font-weight: bold;
+    animation: pulse 1.5s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .page-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
