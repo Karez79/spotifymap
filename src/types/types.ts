@@ -1,4 +1,5 @@
 export interface Song {
+  url: string | undefined;
   id: number;
   name: string;
   artists: string;

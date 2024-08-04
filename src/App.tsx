@@ -16,6 +16,8 @@ const App: React.FC = () => {
   const [visibleRecommendedSongs, setVisibleRecommendedSongs] = useState<Song[]>([]);
   const [visibleSongPage, setVisibleSongPage] = useState(1);
   const [visibleRecommendedSongPage, setVisibleRecommendedSongPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [loadingText, setLoadingText] = useState("Секундочку...");
 
   useEffect(() => {
     const loadSongs = async () => {
@@ -29,6 +31,8 @@ const App: React.FC = () => {
 
         setSongs(allSongs);
         setVisibleSongs(allSongs.slice(0, 15));
+        setLoadingText("Открываю...");
+        setTimeout(() => setLoading(false), 1000); // Убираем прелоадер через 1 секунду
       } catch (error) {
         console.error('Error loading songs:', error);
       }
@@ -39,18 +43,34 @@ const App: React.FC = () => {
 
   const loadMoreSongs = () => {
     const nextPage = visibleSongPage + 1;
-    const nextSongs = songs.slice(visibleSongs.length, visibleSongs.length + 15);
-    setVisibleSongs((prevVisibleSongs) => [...prevVisibleSongs, ...nextSongs]);
+    const nextSongs = songs.slice((nextPage - 1) * 15, nextPage * 15);
+    setVisibleSongs(nextSongs);
     setVisibleSongPage(nextPage);
     console.log('Loading more songs:', nextSongs);
   };
 
+  const loadPreviousSongs = () => {
+    const previousPage = visibleSongPage - 1;
+    const previousSongs = songs.slice((previousPage - 1) * 15, previousPage * 15);
+    setVisibleSongs(previousSongs);
+    setVisibleSongPage(previousPage);
+    console.log('Loading previous songs:', previousSongs);
+  };
+
   const loadMoreRecommendedSongs = () => {
     const nextPage = visibleRecommendedSongPage + 1;
-    const nextRecommendedSongs = recommendedSongs.slice(visibleRecommendedSongs.length, visibleRecommendedSongs.length + 15);
-    setVisibleRecommendedSongs((prevVisibleRecommendedSongs) => [...prevVisibleRecommendedSongs, ...nextRecommendedSongs]);
+    const nextRecommendedSongs = recommendedSongs.slice((nextPage - 1) * 15, nextPage * 15);
+    setVisibleRecommendedSongs(nextRecommendedSongs);
     setVisibleRecommendedSongPage(nextPage);
     console.log('Loading more recommended songs:', nextRecommendedSongs);
+  };
+
+  const loadPreviousRecommendedSongs = () => {
+    const previousPage = visibleRecommendedSongPage - 1;
+    const previousRecommendedSongs = recommendedSongs.slice((previousPage - 1) * 15, previousPage * 15);
+    setVisibleRecommendedSongs(previousRecommendedSongs);
+    setVisibleRecommendedSongPage(previousPage);
+    console.log('Loading previous recommended songs:', previousRecommendedSongs);
   };
 
   const handleSongClick = (song: Song) => {
@@ -59,46 +79,66 @@ const App: React.FC = () => {
     const similarSongs = similarSongPairs.map((pair) => pair[1]);
     setRecommendedSongs(similarSongs);
     setVisibleRecommendedSongs(similarSongs.slice(0, 15));
+    setVisibleRecommendedSongPage(1);
   };
+
+  useEffect(() => {
+    if (!loading) {
+      document.querySelector('.left-pane')?.classList.add('fade-in');
+      document.querySelector('.right-pane')?.classList.add('fade-in');
+      document.querySelector('.player')?.classList.add('fade-in');
+    }
+  }, [loading]);
 
   console.log("Current song in App:", currentSong);
 
   return (
     <div className="App">
-      {visibleSongs.length > 0 && <ThreeCanvas songs={visibleSongs} />}
-      <div className="left-pane">
-        {currentSong && <Player song={currentSong} allSongs={songs} onSongClick={handleSongClick} />}
-        {visibleRecommendedSongs.length > 0 && (
-          <div className="recommendations">
-            <h2>Recommended Songs</h2>
-            <ul>
-              {visibleRecommendedSongs.map((song) => (
-                <li key={song.id} onClick={() => handleSongClick(song)}>
-                  {song.name} by {song.artists}
-                </li>
-              ))}
-            </ul>
-            {visibleRecommendedSongs.length < recommendedSongs.length && (
-              <button onClick={loadMoreRecommendedSongs}>Load More Recommended Songs</button>
+      {loading ? (
+        <div className="preloader">
+          <div className="spinner"></div>
+          <div className="preloader-text text-fade">{loadingText}</div>
+        </div>
+      ) : (
+        <>
+          {visibleSongs.length > 0 && <ThreeCanvas songs={visibleSongs} />}
+          <div className="left-pane">
+            {currentSong && <Player song={currentSong} allSongs={songs} onSongClick={handleSongClick} />}
+            {visibleRecommendedSongs.length > 0 && (
+              <div className="recommendations">
+                <h2>Recommended Songs</h2>
+                <ul>
+                  {visibleRecommendedSongs.map((song) => (
+                    <li key={song.id} onClick={() => handleSongClick(song)} className={currentSong && currentSong.id === song.id ? 'current-song' : ''}>
+                      {song.name} by {song.artists}
+                    </li>
+                  ))}
+                </ul>
+                <div className="page-buttons">
+                  {visibleRecommendedSongPage > 1 && <button onClick={loadPreviousRecommendedSongs}>Previous</button>}
+                  {visibleRecommendedSongs.length === 15 && <button onClick={loadMoreRecommendedSongs}>Next</button>}
+                </div>
+              </div>
             )}
           </div>
-        )}
-      </div>
-      <div className="right-pane">
-        <div className="song-list">
-          <h2>Songs</h2>
-          <ul>
-            {visibleSongs.map((song) => (
-              <li key={song.id} onClick={() => handleSongClick(song)}>
-                {song.name} by {song.artists}
-              </li>
-            ))}
-          </ul>
-          {visibleSongs.length < songs.length && (
-            <button onClick={loadMoreSongs}>Load More Songs</button>
-          )}
-        </div>
-      </div>
+          <div className="right-pane">
+            <div className="song-list">
+              <h2>Songs</h2>
+              <ul>
+                {visibleSongs.map((song) => (
+                  <li key={song.id} onClick={() => handleSongClick(song)} className={currentSong && currentSong.id === song.id ? 'current-song' : ''}>
+                    {song.name} by {song.artists}
+                  </li>
+                ))}
+              </ul>
+              <div className="page-buttons">
+                {visibleSongPage > 1 && <button onClick={loadPreviousSongs}>Previous</button>}
+                {visibleSongs.length === 15 && <button onClick={loadMoreSongs}>Next</button>}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -1,10 +1,12 @@
-import songsData from './songs.json';
 import { Song } from '../types/types';
+import songsData from './songs.json';
 
 export const fetchSongs = async (): Promise<Song[]> => {
   return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(songsData);
-    }, 1000); // Симуляция задержки для асинхронного вызова
+    const songs = songsData.map((data: any, index: number) => ({
+      ...data,
+      id: index + 1
+    }));
+    resolve(songs);
   });
 };

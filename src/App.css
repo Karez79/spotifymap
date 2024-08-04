@@ -1,8 +1,12 @@
+#root {
+  background-color: black;
+}
+
 body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: #0D1B2A; /* Устанавливаем черный фон */
+  background-color: black;
   color: #fff;
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -12,7 +16,7 @@ body {
   height: 100vh;
   overflow: hidden;
   position: relative;
-  background-color: #0D1B2A; /* Устанавливаем черный фон */
+  background-color: black;
   color: #fff;
 }
 
@@ -23,7 +27,6 @@ body {
   width: 100%;
   height: 100%;
   z-index: 0;
-  background-color: black;
 }
 
 .hint {
@@ -43,21 +46,33 @@ body {
 .left-pane, .right-pane {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
   z-index: 2;
   position: relative;
   overflow-y: auto;
   height: 100vh;
+  background-color: transparent;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }
 
 .left-pane {
   width: 30%;
+  align-items: flex-start;
 }
 
 .right-pane {
   width: 30%;
   margin-left: auto;
+  align-items: flex-end;
+}
+
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 button {
@@ -68,6 +83,7 @@ button {
   color: white;
   cursor: pointer;
   border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -78,6 +94,16 @@ button:hover {
   padding: 10px;
   width: 100%;
   box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.player-visible .player,
+.fade-in .recommendations,
+.fade-in .song-list {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .player h2, .player h3, .recommendations h2, .song-list h2 {
@@ -92,8 +118,241 @@ button:hover {
 .player li, .recommendations li, .song-list li {
   cursor: pointer;
   margin: 5px 0;
+  transition: background-color 0.3s ease;
 }
 
-.player li:hover, .recommendations li:hover, .song-list li:hover {
-  text-decoration: underline;
+.player li:hover,
+.recommendations li:hover,
+.song-list li:hover {
+  background-color: #415A77;
+}
+
+.player .current-song,
+.recommendations .current-song,
+.song-list .current-song {
+  font-weight: bold;
+  color: #FFD700;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  flex-direction: column;
+}
+
+.spinner {
+  border: 16px solid #0D1B2A;
+  border-top: 16px solid #778DA9;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.preloader-text {
+  color: #E0E1DD;
+  font-size: 24px;
+  text-align: center;
+  margin-top: 20px;
+  animation: textChange 6s infinite;
+}
+
+@keyframes textChange {
+  0% {
+    content: "Секундочку...";
+  }
+  100% {
+    content: "Открываю...";
+  }
+}
+
+.text-fade {
+  animation: fade 3s infinite;
+}
+
+@keyframes fade {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-size: 24px;
+  margin-top: 10px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: #415A77;
+  border-radius: 5px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #778DA9;
+  border-radius: 5px;
+}
+
+.visualizer-container {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.visualizer {
+  width: 100%;
+  height: 100px;
+  background-color: #0D1B2A;
+}
+
+.song-list .song-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s, opacity 0.3s, transform 0.3s;
+}
+
+.song-list .song-item:hover {
+  background-color: #415A77;
+}
+
+.song-list .current-song {
+  font-weight: bold;
+  color: #FFD700;
+  animation: pulse 1.5s infinite;
+}
+
+.recommendations .current-song {
+  font-weight: bold;
+  color: #FFD700;
+  animation: pulse 1.5s infinite;
+}
+
+.player {
+  position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: bottom 0.5s ease-out, opacity 0.5s ease-out;
+  opacity: 0;
+}
+
+.player-visible {
+  bottom: 0;
+  opacity: 1;
+}
+
+.song-info {
+  font-size: 18px;
+  text-align: center;
+}
+
+.audio-element {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 50px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.controls svg {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.controls svg:hover {
+  transform: scale(1.2);
+}
+
+.left-controls,
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+li {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s, opacity 0.3s, transform 0.3s;
+}
+
+li:hover {
+  background-color: #415A77;
+}
+
+.current-song {
+  font-weight: bold;
+  color: #FFD700;
+  animation: pulse 1.5s infinite;
 }
