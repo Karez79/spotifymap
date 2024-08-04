@@ -18,6 +18,7 @@ const App: React.FC = () => {
   const [visibleRecommendedSongPage, setVisibleRecommendedSongPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [loadingText, setLoadingText] = useState("Секундочку...");
+  const [showSongHint, setShowSongHint] = useState(true);
 
   useEffect(() => {
     const loadSongs = async () => {
@@ -80,6 +81,7 @@ const App: React.FC = () => {
     setRecommendedSongs(similarSongs);
     setVisibleRecommendedSongs(similarSongs.slice(0, 15));
     setVisibleRecommendedSongPage(1);
+    setShowSongHint(false); // Скрываем подсказку после клика на песню
   };
 
   useEffect(() => {
@@ -87,6 +89,15 @@ const App: React.FC = () => {
       document.querySelector('.left-pane')?.classList.add('fade-in');
       document.querySelector('.right-pane')?.classList.add('fade-in');
       document.querySelector('.player')?.classList.add('fade-in');
+      const hintElement = document.querySelector('.song-hint');
+      if (hintElement) {
+        setTimeout(() => {
+          hintElement.classList.add('show');
+          setInterval(() => {
+            hintElement.classList.toggle('shake');
+          }, 5000); // Добавляем эффект тряски каждые 5 секунд
+        }, 5000); // Показываем подсказку через 5 секунд
+      }
     }
   }, [loading]);
 
@@ -102,6 +113,7 @@ const App: React.FC = () => {
       ) : (
         <>
           {visibleSongs.length > 0 && <ThreeCanvas songs={visibleSongs} />}
+          {showSongHint && <div className="song-hint">Нажмите на песню, чтобы ее послушать</div>}
           <div className="left-pane">
             {visibleRecommendedSongs.length > 0 && (
               <div className="recommendations">

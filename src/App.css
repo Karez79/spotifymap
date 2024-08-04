@@ -378,3 +378,38 @@ li:hover {
   opacity: 1;
   transform: translateY(0);
 }
+
+
+.song-hint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-100%) translateX(-50%);
+  padding: 20px 40px;
+  background: #fff; /* Белый фон */
+  color: #000; /* Черный текст */
+  border-radius: 5px;
+  z-index: 1;
+  pointer-events: none;
+  font-size: 16px;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Добавляем анимацию */
+  opacity: 0; /* Начальная непрозрачность */
+}
+
+.song-hint.show {
+  opacity: 1; /* Полная непрозрачность */
+  transform: translateX(-50%); /* Центрируем по горизонтали */
+}
+
+.song-hint.shake {
+  animation: shake 0.5s; /* Добавляем анимацию тряски */
+  animation-iteration-count: infinite;
+}
+
+@keyframes shake {
+  0% { transform: translateX(-50%) translateX(0); }
+  25% { transform: translateX(-50%) translateX(-10px); }
+  50% { transform: translateX(-50%) translateX(10px); }
+  75% { transform: translateX(-50%) translateX(-10px); }
+  100% { transform: translateX(-50%) translateX(0); }
+}
