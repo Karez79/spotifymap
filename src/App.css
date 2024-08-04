@@ -66,8 +66,10 @@ body {
 
 .right-pane {
   width: 30%;
-  margin-left: auto;
   align-items: flex-end;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .fade-in {

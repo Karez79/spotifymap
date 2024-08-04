@@ -1,7 +1,6 @@
 import React from 'react';
 import { Song } from '../../types/types';
 import './Recommendations.module.css';
-import '../../App.css';
 
 interface RecommendationsProps {
   songs: Song[];
