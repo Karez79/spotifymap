@@ -103,7 +103,6 @@ const App: React.FC = () => {
         <>
           {visibleSongs.length > 0 && <ThreeCanvas songs={visibleSongs} />}
           <div className="left-pane">
-            {currentSong && <Player song={currentSong} allSongs={songs} onSongClick={handleSongClick} />}
             {visibleRecommendedSongs.length > 0 && (
               <div className="recommendations">
                 <h2>Recommended Songs</h2>
@@ -137,6 +136,7 @@ const App: React.FC = () => {
               </div>
             </div>
           </div>
+          {currentSong && <Player song={currentSong} allSongs={songs} onSongClick={handleSongClick} />}
         </>
       )}
     </div>

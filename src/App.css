@@ -131,7 +131,7 @@ button:hover {
 .recommendations .current-song,
 .song-list .current-song {
   font-weight: bold;
-  color: #FFD700;
+  /* color: #FFD700; */
   animation: pulse 1.5s infinite;
 }
 
@@ -260,13 +260,13 @@ button:hover {
 
 .song-list .current-song {
   font-weight: bold;
-  color: #FFD700;
+  /* color: #FFD700; */
   animation: pulse 1.5s infinite;
 }
 
 .recommendations .current-song {
   font-weight: bold;
-  color: #FFD700;
+  /* color: #FFD700; */
   animation: pulse 1.5s infinite;
 }
 
@@ -277,7 +277,7 @@ button:hover {
   transform: translateX(-50%);
   width: 80%;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: transparent;
   border-radius: 10px 10px 0 0;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -298,7 +298,7 @@ button:hover {
 }
 
 .audio-element {
-  width: 100%;
+  width: 50%;
   margin-top: 10px;
   border-radius: 50px;
 }
@@ -329,8 +329,10 @@ button:hover {
 .page-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  /* gap: 300px; */
   margin-top: 10px;
+  justify-content: space-between;
+  width: 50%;
 }
 
 ul {
@@ -353,6 +355,6 @@ li:hover {
 
 .current-song {
   font-weight: bold;
-  color: #FFD700;
+  /* color: #FFD700; */
   animation: pulse 1.5s infinite;
 }
