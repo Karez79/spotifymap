@@ -1,6 +1,7 @@
 import React from 'react';
 import { Song } from '../../types/types';
 import './Tooltip.module.css';
+import '../../App.css';
 
 interface TooltipProps {
   song: Song;

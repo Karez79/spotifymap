@@ -1,4 +1,3 @@
-/* Player.module.css */
 .player {
     position: fixed;
     bottom: -100px;
@@ -46,12 +45,5 @@
   
   .controls svg:hover {
     transform: scale(1.2);
-  }
-  
-  .left-controls,
-  .right-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
   }
   

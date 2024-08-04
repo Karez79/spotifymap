@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Song } from '../../types/types';
 import { FaPlay, FaPause, FaStepForward, FaStepBackward } from 'react-icons/fa';
 import './Player.module.css';
+import '../../App.css';
 
 interface PlayerProps {
   song: Song;
